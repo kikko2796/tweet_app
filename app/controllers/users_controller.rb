@@ -9,7 +9,11 @@ class UsersController < ApplicationController
     @user=User.new
   end
   def create
-    @user = User.new(name: params[:name], email:  params[:email])
+    @user = User.new(
+      name: params[:name],
+      email: params[:email],
+      image_name: "/progate default_user.jpg"
+      )
     if @user.save
       flash[:notice]="ユーザー登録が完了しました"
     redirect_to("/users/#{@user.id}")
@@ -24,6 +28,11 @@ class UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
     @user.name=params[:name]
     @user.email=params[:email]
+    if params[:image]
+      @user.image_name = "/progate default_user.jpg"
+      image=params[:image]
+      File.binwrite("public/progate default_user.jpg",image.read)
+    end
     if @user.save
       flash[:notice]="ユーザー情報を編集しました"
     redirect_to("/users/#{@user.id}")
