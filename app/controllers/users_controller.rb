@@ -79,4 +79,7 @@ class UsersController < ApplicationController
     end
   end
   
+  def likes
+  end
+  
 end
