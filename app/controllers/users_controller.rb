@@ -52,12 +52,11 @@ class UsersController < ApplicationController
   def login_form
   end
   def login
-    @user=User.find_by(email: params[:email],
-    password: params[:password])
+    @user = User.find_by(email: params[:email])
     
-    if@user
-      session[:user_id]=@user.id
-      flash[:notice]="ログインしました"
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      flash[:notice] = "ログインしました"
       redirect_to("/posts/index")
     else
       @error_message="メールアドレスまたはパスワードが間違っています"
@@ -80,6 +79,8 @@ class UsersController < ApplicationController
   end
   
   def likes
+    @user = User.find_by(id: params[:id])
+    @likes = Like.where(user_id: @user.id)
   end
   
 end
